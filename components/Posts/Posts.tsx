@@ -47,7 +47,7 @@ const Posts = () => {
       {posts.map((post: any) => (
         <div key={post.id} className="pt-3">
           <div className="flex justify-start items-center pb-3">
-            <div className="w-full bg-slate-700 text-white px-3 lg:mx-10 max-sm:mx-3 rounded-xl shadow-xl">
+            <div className="w-full bg-slate-700 text-white px-3 lg:mx-10 max-sm:mx-3 rounded-xl shadow-2xl">
               <h1 className="text-xl font-bold py-2">
                 <Link href={`/post/[slug]`} as={`/post/${post.slug}`} passHref>
                   <button

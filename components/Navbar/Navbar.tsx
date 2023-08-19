@@ -19,16 +19,16 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
   };
 
   return (
-    <nav className="flex p-4 shadow-xl bg-slate-800 lg:justify-between">
-      <Link href="/" className="text-xl font-semibold text-white">
+    <nav className="flex p-4 shadow-xl lg:justify-between rounded-b-xl">
+      <Link href="/" className="text-xl font-semibold">
         JB Mods
       </Link>
-      <div className="lg:mx-10 text-white flex gap-5 items-center ml-auto mx-10">
+      <div className="lg:mx-10 flex gap-5 items-center ml-auto mx-10">
         <button onClick={handleToggleMode} className="lg:mx-3">
           {isDarkMode ? (
-            <BsFillMoonFill size={20} color="white" />
+            <BsFillMoonFill size={20} color="black" />
           ) : (
-            <BsFillSunFill size={20} color="white" />
+            <BsFillSunFill size={20} color="black" />
           )}
         </button>
         <div className="max-sm:hidden">
