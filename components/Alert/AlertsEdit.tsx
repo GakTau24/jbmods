@@ -68,7 +68,7 @@ export default function AlertsEditPosts({ title }: props) {
           <div>
             <p className="font-bold text-teal-900">Success</p>
             <p className="text-sm text-teal-900">
-              Anda berhasil mengedit {title}
+              You have successfully edited posts {title}
             </p>
           </div>
         </div>

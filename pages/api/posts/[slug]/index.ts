@@ -24,7 +24,7 @@ export default async function handler(
         return res.status(200).json(updatedPost);
       } catch (error) {
         console.error("Error updating post views:", error);
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(404).json({ error: "Posts not Found" });
       }
       
     } else {

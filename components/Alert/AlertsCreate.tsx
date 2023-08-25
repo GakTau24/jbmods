@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 type props = {
-  title: string
-}
+  title: string;
+};
 
-export default function AlertsCreatePosts({title}: props) {
+export default function AlertsCreatePosts({ title }: props) {
   const [showAlert, setShowAlert] = useState(true);
   const [progress, setProgress] = useState(100);
 
@@ -33,7 +33,7 @@ export default function AlertsCreatePosts({title}: props) {
 
   useEffect(() => {
     if (!showAlert) {
-      window.location.replace("/dashboard")
+      window.location.replace("/dashboard");
     }
   }, [showAlert]);
 
@@ -53,7 +53,7 @@ export default function AlertsCreatePosts({title}: props) {
           className="absolute top-0 left-0 bg-teal-500 h-1"
           style={{ width: `${progress}%` }}></div>
         <div className="flex items-center">
-        <motion.svg
+          <motion.svg
             className="h-6 w-6 text-teal-500 mr-4"
             fill="none"
             stroke="currentColor"
@@ -71,7 +71,7 @@ export default function AlertsCreatePosts({title}: props) {
           <div>
             <p className="font-bold text-teal-900">Success</p>
             <p className="text-sm text-teal-900">
-              Anda berhasil menambahkan {title}
+              You have successfully created posts {title}
             </p>
           </div>
         </div>

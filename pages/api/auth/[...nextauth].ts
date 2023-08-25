@@ -1,18 +1,30 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
-import { compare } from 'bcryptjs';
+import NextAuth, { type NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import DiscordProvider from "next-auth/providers/discord";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+import { compare } from "bcryptjs";
+import { UserSession } from "@/handler/userInterface";
 
 const prisma = new PrismaClient();
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      credentials: { 
-        email: { label: "Username", type: "text", placeholder: "johndoe@domain.com" },
-        password: { label: "Password", type: "password", placeholder: "verysecurepassword" },
+      credentials: {
+        email: {
+          label: "Username",
+          type: "text",
+          placeholder: "johndoe@domain.com",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "verysecurepassword",
+        },
       },
       async authorize(credentials) {
         try {
@@ -32,25 +44,35 @@ export default NextAuth({
         } catch (ignored) {
           return null;
         }
-      }
-    })
+      },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+    }),
   ],
-  adapter: PrismaAdapter(prisma),
   pages: {
-    signIn: "/login"
-},
-session: {
-    strategy: "jwt"
-},
-callbacks: {
-    jwt:async ({token, user}) => {
-        user && (token.user = user)
-        return token
+    signIn: "/login",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      user && (token.user = user);
+      return token;
     },
-    session:async ({session, token}) => {
-        const user = token.user as any
-        session.user = user
-        return session
-    }
-}
-});
+    session: async ({ session, token }) => {
+      const user = token.user as UserSession;
+      session.user = user as any;
+      return session;
+    },
+  },
+};
+
+export default NextAuth(authOptions);

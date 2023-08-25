@@ -1,42 +1,33 @@
 "use client";
-import axios from "axios";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import AlertsCreatePosts from "@/components/Alert/AlertsCreate";
+import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 
 function Create() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [picture, setPicture] = useState("");
-  const [authorId, setAuthorId] = useState("");
-  const [session, setSession] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/session`
-        );
-        setSession(res.data);
-        setAuthorId(res.data.user.id.toString());
-      } catch (error) {
-        console.error("Error fetching session:", error);
-      }
-    };
+  const { data: userId } = useSession();
 
-    fetchSession();
-  }, []);
+  const authorId = userId?.user.id;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const postData = {
-      title: title,
-      content: content,
-      picture: picture,
-      authorId: parseInt(authorId),
-    };
+    let postData = {};
+
+    if (authorId) {
+      postData = {
+        title: title,
+        content: content,
+        picture: picture,
+        authorId: parseInt(authorId),
+      };
+    }
 
     try {
       const response = await fetch("/api/posts", {
@@ -51,7 +42,6 @@ function Create() {
         setTitle("");
         setContent("");
         setPicture("");
-        setAuthorId("");
         setShowAlert(true);
       } else {
         console.error("Error creating post");
@@ -62,33 +52,39 @@ function Create() {
   };
 
   return (
-    <>
-      <Link href={"/dashboard"} className="bg-blue-500 hover:bg-blue-600 flex w-14 p-3 lg:mx-20 max-sm:mx-5 rounded-lg mt-10">Back</Link>
-      <div className="flex justify-center items-center h-screen">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}>
       {showAlert && (
-          <div className="fixed top-[70px] max-sm:top-16 right-0 md:right-1 max-md:h-10 max-md:right-0">
-            <AlertsCreatePosts title={title} />
-          </div>
-        )}
-        <div className="max-w-sm mx-auto p-4 border rounded shadow w-full">
-          <h2 className="text-lg font-semibold mb-4 text-center">
-            Create Post
-          </h2>
-          <form onSubmit={handleSubmit}>
+        <div className="fixed top-[70px] max-sm:top-16 right-4 md:right-1 max-md:h-10 max-md:right-0">
+          <AlertsCreatePosts title={title} />
+        </div>
+      )}
+      <Link
+        href={"/dashboard"}
+        className="bg-blue-500 hover:bg-blue-600 flex w-14 p-3 lg:mx-20 max-sm:mx-5 rounded-lg mt-10">
+        Back
+      </Link>
+      <h2 className="text-lg font-semibold mb-4 text-center">Create Posts</h2>
+      <div className="flex justify-center items-center h-screen">
+        <div className=" p-4 border border-slate-500 rounded shadow w-full h-screen">
+          <form onSubmit={handleSubmit} className="py-10">
             <label className="block mb-2">
               Title:
               <input
-                className="w-full p-2 border rounded mt-1 bg-transparent"
+                className="w-full p-2 border border-slate-500 rounded mt-1 bg-transparent my-5 py-3"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                required
               />
             </label>
 
             <label className="block mb-2">
               Picture URL:
               <input
-                className="w-full p-2 border rounded mt-1 bg-transparent"
+                className="w-full p-2 border border-slate-500 rounded mt-1 bg-transparent my-5 py-3"
                 type="text"
                 value={picture}
                 onChange={(e) => setPicture(e.target.value)}
@@ -97,9 +93,10 @@ function Create() {
             <label className="block mb-2">
               Content:
               <textarea
-                className="w-full p-2 border rounded mt-1 bg-transparent h-52"
+                className="w-full p-2 border border-slate-500 rounded mt-1 bg-transparent h-96 my-5 py-3"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                required
               />
             </label>
             <button
@@ -110,7 +107,7 @@ function Create() {
           </form>
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }
 

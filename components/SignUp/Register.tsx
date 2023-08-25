@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { motion } from "framer-motion";
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
@@ -36,7 +37,7 @@ const RegisterForm = () => {
       setErrorMessage("");
       router.push("/dashboard");
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again.");
+      setErrorMessage("Email or Username already exists");
     }
   };
 
@@ -46,7 +47,11 @@ const RegisterForm = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-opacity-25 bg-gray-900 backdrop-blur-md p-8 rounded-md w-96">
+      <motion.div
+        className="bg-opacity-25 bg-gray-900 backdrop-blur-md p-8 rounded-md w-96"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}>
         <h2 className="text-xl font-semibold mb-4 text-center">Register</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -92,7 +97,11 @@ const RegisterForm = () => {
                 type="button"
                 className="absolute top-2 right-2"
                 onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <AiFillEye size={25} /> : <AiFillEyeInvisible size={25} />}
+                {showPassword ? (
+                  <AiFillEye size={25} />
+                ) : (
+                  <AiFillEyeInvisible size={25} />
+                )}
               </button>
             </div>
           </div>
@@ -113,7 +122,11 @@ const RegisterForm = () => {
                 type="button"
                 className="absolute top-2 right-2"
                 onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}>
-                {showPasswordConfirm ? <AiFillEye size={25} /> : <AiFillEyeInvisible size={25} />}
+                {showPasswordConfirm ? (
+                  <AiFillEye size={25} />
+                ) : (
+                  <AiFillEyeInvisible size={25} />
+                )}
               </button>
             </div>
           </div>
@@ -134,7 +147,7 @@ const RegisterForm = () => {
             </Link>
           </p>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

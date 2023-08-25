@@ -4,6 +4,8 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -40,7 +42,11 @@ const LoginForm = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-opacity-25 bg-gray-900 backdrop-blur-md p-8 rounded-md w-96">
+      <motion.div
+        className="bg-opacity-25 bg-gray-900 backdrop-blur-md p-8 rounded-md w-96"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}>
         <h2 className="text-xl font-semibold mb-4 text-center">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -52,7 +58,7 @@ const LoginForm = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 rounded-md bg-transparent border-violet-600 ring-1 focus:ring-violet-600 focus:outline-none"
+              className="w-full shadow-xl p-2 rounded-md bg-transparent border-violet-600 ring-1 focus:ring-violet-600 focus:outline-none"
               required
             />
           </div>
@@ -66,7 +72,7 @@ const LoginForm = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2 rounded-md bg-transparent border-violet-600 ring-1 focus:ring-violet-600 focus:outline-none"
+                className="w-full shadow-xl p-2 rounded-md bg-transparent border-violet-600 ring-1 focus:ring-violet-600 focus:outline-none"
                 required
               />
               <button
@@ -83,7 +89,7 @@ const LoginForm = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-2 rounded-md">
+            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-2 rounded-md shadow-xl">
             Log In
           </button>
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
@@ -97,7 +103,31 @@ const LoginForm = () => {
             </Link>
           </p>
         </form>
-      </div>
+        <div className="flex justify-center flex-col gap-3 py-2">
+          <button
+            onClick={() => signIn("google")}
+            className="flex justify-center bg-opacity-50 bg-slate-600 hover:bg-slate-700 backdrop-blur-xl rounded-md p-3 mx-5 gap-2 shadow-xl">
+            <Image
+              src={"/assets/google.png"}
+              width={20}
+              height={20}
+              alt="Google Logo"
+            />
+            <h1>Login with Google</h1>
+          </button>
+          <button
+            onClick={() => signIn("discord")}
+            className="flex justify-center bg-opacity-50 bg-slate-600 hover:bg-slate-700 backdrop-blur-xl rounded-md p-3 mx-5 gap-2 shadow-xl">
+            <Image
+              src={"/assets/discord.svg"}
+              width={30}
+              height={20}
+              alt="Google Logo"
+            />
+            <h1>Login with Discord</h1>
+          </button>
+        </div>
+      </motion.div>
     </div>
   );
 };

@@ -1,5 +1,57 @@
+import DetailPosts from "@/components/Posts/detailPosts";
 import { PrismaClient } from "@prisma/client";
-import Image from "next/image";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import NotFound from "@/components/Handler/NotFound";
+
+type Props = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: any
+): Promise<Metadata> {
+  const posts = await getDetailPost(params.slug);
+  const post = posts[0];
+  if(!post){
+    return {
+      ...NotFound
+    }
+  }
+
+  const previousImages = (await parent)?.openGraph?.images || [];
+  return {
+    title: `${post.title} - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+    openGraph: {
+      images: [
+        {
+          url: post.picture,
+          alt: post.title,
+        },
+        ...previousImages,
+      ],
+      title: `${post.title} - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+      description: `Download Mod GTA ${post.title} hanya di ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+      url: process.env.NEXT_PUBLIC_BASE_URL,
+    },
+    description: `Download Mod GTA ${post.title} hanya di ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+    robots: {
+      index: true,
+      follow: true,
+      nocache: true,
+    },
+    icons: "",
+    keywords: [
+      `${process.env.NEXT_PUBLIC_SITE_NAME}`,
+      `download mod gta sa ${post.title}`,
+      `download mod gta samp ${post.title}`,
+      `download cleo gta sa ${post.title}`,
+      `download cleo gta samp ${post.title}`,
+    ],
+  };
+}
 
 const prisma = new PrismaClient();
 
@@ -9,55 +61,22 @@ const getDetailPost = async (slug: string) => {
       slug: slug,
     },
   });
-  return res;
+  if(!res) {
+    return NotFound
+  } else{
+
+    return res;
+  }
 };
 
-async function page({ params }: any) {
-  const detail = await getDetailPost(params.slug);
-
-  if (detail && detail.length > 0) {
-    const post = detail[0];
-
-    const convertLinksToClickable = (text: string) => {
-      const urlRegex = /(?:https?|ftp):\/\/[\S]+/g;
-      return text.replace(urlRegex, (url) => `<a href="${url}" target="_blank" class="text-blue-600 hover:text-blue-800">${url}</a>`);
-    };
-
-    const contentWithClickableLinks = convertLinksToClickable(post.content);
-
-    return (
-      <div className="flex justify-center items-center flex-col lg:mx-20 max-sm:mx-1 lg:my-10 py-6 gap-2 rounded-xl shadow-xl">
-        {post.picture && post.picture.startsWith("https://") && post.title && (
-          <div className="max-sm:w-full max-sm:px-2">
-            <Image
-              src={post.picture}
-              width={500}
-              height={500}
-              alt={post.title}
-              objectFit="cover"
-              priority
-            />
-          </div>
-        )}
-        <h1 className="text-xl font-bold">{post.title}</h1>
-        <div
-          className="w-full lg:px-10 max-sm:px-3 whitespace-pre"
-          dangerouslySetInnerHTML={{ __html: contentWithClickableLinks }}
-        />
-        <p className="text-right w-full lg:px-10 max-sm:px-3">
-          Create: {new Date(post.createdAt).toLocaleDateString()}
-        </p>
-        <p className="text-right w-full lg:px-10 max-sm:px-3">
-          Update: {new Date(post.updatedAt).toLocaleDateString()}
-        </p>
-      </div>
-    );
-  }
-
+async function page({ params }) {
+  const { slug } = params;
+  const posts = await getDetailPost(slug)
+  
   return (
-    <div className="flex justify-center items-center">
-      <h1 className="text-center text-xl font-bold">Post not found</h1>
-    </div>
+    <>
+      <DetailPosts slug={slug}  posts={posts} />
+    </>
   );
 }
 

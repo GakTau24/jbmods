@@ -3,7 +3,7 @@ import SearchInput from "@/components/Search/Search";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home Page",
+  title: `Home - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
 };
 
 function page() {

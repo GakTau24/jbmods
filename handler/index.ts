@@ -14,7 +14,6 @@ interface UserData {
     id: number;
     name: string;
     email: string;
-    // Add any other relevant properties
   }
   
   interface SessionData {

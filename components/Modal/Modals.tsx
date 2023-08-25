@@ -17,7 +17,7 @@ export default function Modal({ setShowModal, handleDeleteClick }: any) {
             <div className="border-0 rounded-lg shadow-lg relative bg-opacity-40 backdrop-filter backdrop-blur-lg backdrop-saturate-200 flex flex-col w-full outline-none focus:outline-none">
               <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                 <h1 className="text-xl font-semibold text-white">
-                  Konfirmasi Penghapusan
+                  Confirm deletion
                 </h1>
                 <button
                   className="p-1 ml-auto bg-transparent border-0 opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -29,7 +29,7 @@ export default function Modal({ setShowModal, handleDeleteClick }: any) {
               </div>
               <div className="relative p-6 flex-auto">
                 <p className="my-4 text-white text-lg leading-relaxed">
-                  Apakah Anda yakin untuk menghapus data ini?
+                  Are you sure you want to delete this posts?
                 </p>
               </div>
               <div className="flex justify-center p-6 border-t border-solid border-slate-200 rounded-b">

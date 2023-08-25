@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({ post });
     } catch (error) {
       console.error('Error fetching post:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(404).json({ error: error });
     }
   } else if (req.method === "DELETE") {
     if(!session){
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(204).end();
     } catch (error) {
       console.error("Error deleting post:", error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(404).json({ error: error });
     }
   } else if (req.method === 'PUT') {
     if(!session){
@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({ post: updatedPost });
     } catch (error) {
       console.error('Error updating post:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(404).json({ error: error });
     }
   } else {
     return res.status(405).json({ message: 'Method not allowed' });

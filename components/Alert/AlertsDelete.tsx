@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function AlertsDelete({title}) {
+export default function AlertsDelete({ title }) {
   const [showAlert, setShowAlert] = useState(true);
   const [progress, setProgress] = useState(100);
 
@@ -69,7 +69,7 @@ export default function AlertsDelete({title}) {
           <div>
             <p className="font-bold text-teal-900">Success</p>
             <p className="text-sm text-teal-900">
-              Anda berhasil menghapus {title}
+              You have successfully deleted posts {title}
             </p>
           </div>
         </div>
