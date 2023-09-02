@@ -1,8 +1,8 @@
 import DetailPosts from "@/components/Posts/detailPosts";
 import { PrismaClient } from "@prisma/client";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import NotFound from "@/components/Handler/NotFound";
+import Comments from "@/components/Posts/Comments";
 
 type Props = {
   params: { slug: string };
@@ -15,10 +15,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const posts = await getDetailPost(params.slug);
   const post = posts[0];
-  if(!post){
+  if (!post) {
     return {
-      ...NotFound
-    }
+      ...NotFound,
+    };
   }
 
   const previousImages = (await parent)?.openGraph?.images || [];
@@ -60,22 +60,36 @@ const getDetailPost = async (slug: string) => {
     where: {
       slug: slug,
     },
+    include: {
+      author: true,
+      comments: {
+        include: {
+          author: true,
+        },
+      },
+    },
   });
-  if(!res) {
-    return NotFound
-  } else{
-
+  if (!res) {
+    return NotFound;
+  } else {
     return res;
   }
 };
 
 async function page({ params }) {
   const { slug } = params;
-  const posts = await getDetailPost(slug)
-  
+  const posts = await getDetailPost(slug);
+
+  if (posts.length === 0) {
+    return NotFound;
+  }
+
+  const post = posts[0];
+
   return (
     <>
-      <DetailPosts slug={slug}  posts={posts} />
+      <DetailPosts slug={slug} posts={posts} />
+      <Comments postId={post.id} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import Profile from "@/components/Dashboard/ProfileUsers/Profile";
+import PostsDashboard from "@/components/AdminDashboard/PostsDashboard"
 import { getServerSession } from "next-auth";
 import { Metadata } from "next";
 
@@ -14,7 +14,7 @@ export async function generateMetadata(
   const session = await getServerSession();
   const previousImages = (await parent)?.openGraph?.images || [];
   return {
-    title: `${session?.user.name} Dashboard - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+    title: `${session?.user.name} Admin Posts - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
     openGraph: {
       images: [
         {
@@ -23,19 +23,18 @@ export async function generateMetadata(
         },
         ...previousImages,
       ],
-      title: `${session?.user.name} Dashboard - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
-      description: `${session?.user.name} Dashboard - ${process.env.NEXT_PUBLIC_SITE_NAME}`
+      title: `${session?.user.name} Admin Posts - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+      description: `${session?.user.name} Admin Posts - ${process.env.NEXT_PUBLIC_SITE_NAME}`
     },
   };
 }
 
-function page({ params }) {
-  const { id } = params;
+function page() {
   return (
     <>
-      <Profile id={id} />
+    <PostsDashboard />
     </>
-  );
+  )
 }
 
-export default page;
+export default page

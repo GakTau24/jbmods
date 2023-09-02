@@ -111,7 +111,7 @@ const LoginForm = () => {
               src={"/assets/google.png"}
               width={20}
               height={20}
-              alt="Google Logo"
+              alt="Google"
             />
             <h1>Login with Google</h1>
           </button>
@@ -122,7 +122,7 @@ const LoginForm = () => {
               src={"/assets/discord.svg"}
               width={30}
               height={20}
-              alt="Google Logo"
+              alt="Discord"
             />
             <h1>Login with Discord</h1>
           </button>

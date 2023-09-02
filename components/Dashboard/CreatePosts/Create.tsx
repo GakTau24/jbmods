@@ -14,6 +14,7 @@ function Create() {
   const { data: userId } = useSession();
 
   const authorId = userId?.user.id;
+  const authorPic = userId?.user.image
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +26,8 @@ function Create() {
         title: title,
         content: content,
         picture: picture,
-        authorId: parseInt(authorId),
+        authorId: authorId,
+        authorPic: authorPic,
       };
     }
 
@@ -67,8 +69,8 @@ function Create() {
         Back
       </Link>
       <h2 className="text-lg font-semibold mb-4 text-center">Create Posts</h2>
-      <div className="flex justify-center items-center h-screen">
-        <div className=" p-4 border border-slate-500 rounded shadow w-full h-screen">
+      <div className="flex justify-center items-center">
+        <div className=" p-4 border border-slate-500 rounded shadow w-full">
           <form onSubmit={handleSubmit} className="py-10">
             <label className="block mb-2">
               Title:

@@ -75,7 +75,7 @@ export default async function handler(
       res.status(401).json("unauthorized");
     }
     try {
-      const { title, content, authorId ,picture } = req.body;
+      const { title, content, authorId, authorPic, picture } = req.body;
 
       const slug = generateUniqueSlug(title);
       const newPost = await prisma.post.create({
@@ -84,6 +84,7 @@ export default async function handler(
           content,
           picture,
           author: { connect: { id: authorId } },
+          authorPic,
           slug,
         },
       });

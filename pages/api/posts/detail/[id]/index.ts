@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if(!session){
       res.status(401).json("unauthorized")
     }
-    const postId = Number(req.query.id);
+    const postId = req.query.id as string;
     try {
       const post = await prisma.post.findUnique({
         where: { id: postId },
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const postId = req.query.id as string;
     try {
       const deletedPost = await prisma.post.delete({
-        where: { id: parseInt(postId) },
+        where: { id: postId },
       });
 
       res.status(204).end();
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if(!session){
       res.status(401).json("unauthorized")
     }
-    const id = Number(req.query.id);
+    const id = req.query.id as string;
     const { title, content, picture, authorId } = req.body;
     const slug = generateUniqueSlug(title);
     

@@ -5,7 +5,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import { compare } from "bcryptjs";
-import { UserSession } from "@/handler/userInterface";
+import { UserSession, IUser } from "@/handler/userInterface";
 
 const prisma = new PrismaClient();
 
@@ -37,10 +37,10 @@ export const authOptions: NextAuthOptions = {
           });
           if (!user) throw new Error("User not found");
 
-          const passwordMatch = await compare(password, user.password);
+          const passwordMatch = await compare(password, user.password as string);
 
           if (!passwordMatch) throw new Error("Invalid password");
-          return user as any;
+          return user as IUser;
         } catch (ignored) {
           return null;
         }

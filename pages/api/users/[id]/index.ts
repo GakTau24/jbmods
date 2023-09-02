@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     if(!session){
       res.status(401).json("unauthorized")
     }
-    const id = parseInt(req.query.id);
+    const id = req.query.id;
 
     try {
       const user = await prisma.user.findUnique({
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     if(!session){
       res.status(401).json("unauthorized")
     }
-    const userId = parseInt(req.query.id);
+    const userId = req.query.id;
     const { name, email, image, password } = req.body;
 
     try {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSession, signOut, signIn } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -13,6 +13,7 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
   const router = usePathname();
   const id = session?.user.id;
   const users = session?.user.role;
+  const navbarRef = useRef<HTMLDivElement | null>(null);
 
   const closeDropdown = () => {
     setMenuOpen(false);
@@ -22,8 +23,21 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
     await signOut();
   };
 
+  useEffect(() => {
+    const handleDocumentClick = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        closeDropdown();
+      }
+    };
+    document.addEventListener("click", handleDocumentClick);
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, []);
+
   return (
     <motion.nav
+      ref={navbarRef}
       className="flex p-4 shadow-lg lg:justify-between rounded-b-xl"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -88,7 +102,7 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
                     className="block px-4 py-2 text-sm hover:bg-blue-500 hover:rounded text-gray-900">
                     Dashboard
                   </Link>
-                  {users == "ADMIN" ? (
+                  {/* {users == "ADMIN" ? (
                     <Link
                       href={"/dashboard/admin/panel"}
                       onClick={closeDropdown}
@@ -97,7 +111,7 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
                     </Link>
                   ) : (
                     <></>
-                  )}
+                  )} */}
                   <hr className="border-gray-900 opacity-30" />
                   <Link
                     href={`/dashboard/profile/${id}`}
@@ -105,6 +119,14 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
                     className="block px-4 py-2 text-sm hover:bg-blue-500 hover:rounded text-gray-900">
                     Profile
                   </Link>
+                  <hr className="border-gray-900 opacity-30" />
+                  {session.user.role == "ADMIN" ? (
+                    <Link
+                      href={`/dashboard/admin/panel/`}
+                      className="block px-4 py-2 text-sm hover:bg-blue-500 hover:rounded text-gray-900">
+                      Admin
+                    </Link>
+                  ) : null}
                   <hr className="border-gray-900 opacity-30" />
                   <button
                     onClick={handleLogout}
@@ -195,19 +217,19 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
                         Dashboard
                       </Link>
                     </li>
-                    <hr className="border-gray-500 opacity-30 w-48" />
-                    <li className="mb-y py-4">
-                      {users == "ADMIN" ? (
+                    {users == "ADMIN" ? (
+                      <li className="mb-y py-4">
+                        <hr className="border-gray-500 opacity-30 w-48" />
                         <Link
                           href={"/dashboard/admin/panel"}
                           onClick={closeDropdown}
                           className="hover:bg-gray-300">
                           Admin
                         </Link>
-                      ) : (
-                        <></>
-                      )}
-                    </li>
+                      </li>
+                    ) : (
+                      <></>
+                    )}
                     <hr className="border-gray-500 opacity-30 w-48" />
                     <li className="mb-y py-4">
                       <button

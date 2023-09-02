@@ -16,7 +16,6 @@ function UserModal({ setShowModal }) {
 
     try {
       const response = await axios.put("/api/users", { userId, newRole });
-      console.log(response.data);
     } catch (error) {
       console.error("Error updating user role:", error);
     }
