@@ -11,6 +11,7 @@ import Sidebar from "./SidebarAdminDashboard";
 interface Users {
   id: string;
   name: string;
+  role: string
 }
 
 function UserDashboard() {
@@ -32,8 +33,7 @@ function UserDashboard() {
     };
 
     fetchUserData();
-    if (userRole === "ADMIN") {
-    } else {
+    if (userRole !== "ADMIN") {
       router.push("/");
     }
   }, [userRole, router]);
@@ -91,6 +91,7 @@ function UserDashboard() {
               <tr className="bg-slate-600 text-white">
                 <th className="py-2 px-4 text-left">ID</th>
                 <th className="py-2 px-4 text-left">User</th>
+                <th className="py-2 px-4 text-left">Role</th>
                 <th className="py-2 px-4 text-left">Action</th>
               </tr>
             </thead>
@@ -108,6 +109,7 @@ function UserDashboard() {
                       transition={{ duration: 0.5, delay: 0.2 }}>
                       <td className="py-2 px-4">{user.id}</td>
                       <td className="py-2 px-4">{user.name}</td>
+                      <td className="py-2 px-4">{user.role}</td>
                       <td className="py-2 px-4">
                         <div className="flex space-x-2">
                           <button className="bg-blue-500 hover:bg-blue-700 p-2 rounded-md text-white"
@@ -120,7 +122,7 @@ function UserDashboard() {
                           </button>
                         </div>
                       </td>
-                      {showModal && <UserModal setShowModal={setShowModal} />}
+                      {showModal && <UserModal setShowModal={setShowModal} usersId={user.id} />}
                     </motion.tr>
                   )}
                 </InView>

@@ -21,7 +21,7 @@ function Dashboard() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`
+          `/api/posts`
         );
         const posts = response.data.posts;
         const filteredPosts = posts.filter(
@@ -40,7 +40,7 @@ function Dashboard() {
   const handleDelete = async (postId) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/detail/${postId}`
+        `/api/posts/detail/${postId}`
       );
       setShowModal(false);
       setShowAlert(true);
@@ -85,7 +85,7 @@ function Dashboard() {
           <table className="min-w-full">
             <thead>
               <tr className="bg-slate-600 text-white">
-                <th className="py-2 px-4 text-left">ID</th>
+                {/* <th className="py-2 px-4 text-left">ID</th> */}
                 <th className="py-2 px-4 text-left">Title</th>
                 <th className="py-2 px-4 text-left">Action</th>
               </tr>
@@ -102,7 +102,7 @@ function Dashboard() {
                         inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                       }
                       transition={{ duration: 0.5, delay: 0.2 }}>
-                      <td className="py-2 px-4">{post.id}</td>
+                      {/* <td className="py-2 px-4">{post.id}</td> */}
                       <td className="py-2 px-4">{post.title}</td>
                       <td className="py-2 px-4">
                         <div className="flex space-x-2">

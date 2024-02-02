@@ -1,43 +1,30 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { BsEye } from "react-icons/bs";
 import axios from "axios";
-import Link from "next/link";
 import { Post } from "@prisma/client";
 import { motion } from "framer-motion";
 import { InView } from "react-intersection-observer";
-import PaginationControls from "./PaginationPosts";
-import LoadingPosts from "./LoadingPosts";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { BsEye } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
-const Posts = () => {
+const SearchPage = ({ searchParams }) => {
+  const { q } = searchParams;
   const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
-  const router = useSearchParams();
-
-  const PAGE_SIZE = 25;
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const page = Number(router?.get("page")) || 1;
-        const response = await axios.get(`/api/posts?page=${page}`);
-        setPosts(response.data.posts);
-        setTotalPages(Math.ceil(response.data.totalPosts / PAGE_SIZE));
-        setIsLoading(false);
-        setCurrentPage(page);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-        setIsLoading(true);
-        setPosts([]);
-      }
+    if (!q) {
+      router.push("/");
+    }
+    const getData = async () => {
+      const response = await axios.get(`/api/posts/search?q=${q}`);
+      const result = response.data.posts;
+      setPosts(result);
     };
-
-    fetchData();
-  }, [router?.get("page")]);
+    getData();
+  }, [q]);
 
   const formatViews = (views: any) => {
     if (views >= 1000) {
@@ -58,15 +45,11 @@ const Posts = () => {
       console.error("Error updating post views:", error);
     }
   };
-  const handlePageChange = (newPage: number) => {};
-  if (isLoading) {
-    <LoadingPosts />;
-  }
 
   return (
-    <motion.div className="bg-opacity-25 lg:mx-60 max-sm:mx-2 rounded-md">
+    <motion.div className="bg-opacity-25 lg:mx-60 max-sm:mx-2 rounded-md lg:py-5">
       {posts.length == 0 ? (
-        <LoadingPosts />
+        <h1>Posts Not Found</h1>
       ) : (
         posts.map((post: any) => (
           <InView key={post.id}>
@@ -119,15 +102,8 @@ const Posts = () => {
           </InView>
         ))
       )}
-      <div className="flex justify-center items-center py-4">
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
     </motion.div>
   );
 };
 
-export default Posts;
+export default SearchPage;

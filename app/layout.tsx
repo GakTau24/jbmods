@@ -36,7 +36,7 @@ export default function RootLayout({
         className={`${inter.className} ${
           isDarkMode
             ? "bg-gradient-to-r from-slate-100 to-slate-200 text-slate-800"
-            : "bg-gradient-to-r from-slate-900 to-gray-500 text-slate-300"
+            : "bg-gradient-to-r from-slate-900 to-gray-500 text-white"
         }`}>
         <SessionProvider>
           <SkeletonTheme baseColor="#313131" highlightColor="#525252">

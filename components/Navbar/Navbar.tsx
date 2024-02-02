@@ -65,7 +65,7 @@ const Navbar = ({ isDarkMode, handleToggleMode }) => {
           </Link>
         </div>
         {session ? (
-          <div className="relative max-sm:hidden">
+          <div className="relative max-sm:hidden z-10">
             <div className="flex gap-1">
               {session.user?.image ? (
                 <Image

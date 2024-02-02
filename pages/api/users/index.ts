@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         
         const { userId, newRole } = req.body;
+        console.log({backend: newRole, userId})
 
         try {
             const updatedUser = await prisma.user.update({
