@@ -122,7 +122,7 @@ function UserDashboard() {
                           </button>
                         </div>
                       </td>
-                      {showModal && <UserModal setShowModal={setShowModal} usersId={user.id} />}
+                      {showModal && <UserModal setShowModal={setShowModal} />}
                     </motion.tr>
                   )}
                 </InView>
